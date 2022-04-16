@@ -1,0 +1,11 @@
+.nav-container{
+    display: flex;
+    justify-content: space-between;
+    margin-top:20px;
+    margin-left: 50px;
+}
+.nav-container a{
+ text-decoration: none;
+ margin-right:10px;
+ font-size:22px;
+}

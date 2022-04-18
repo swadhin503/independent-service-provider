@@ -19,7 +19,7 @@ const Signup = () => {
         user,
         error
       ] = useCreateUserWithEmailAndPassword(auth,{sendEmailVerification: true});
-      const [signInWithGoogle, user1] = useSignInWithGoogle(auth);
+      const [signInWithGoogle, user1,error1] = useSignInWithGoogle(auth);
 
       const handleEmail = (event) => {
           setEmail(event.target.value);
@@ -39,8 +39,9 @@ const Signup = () => {
       if(user || user1){
           navigate('/');
       }
-      if(error) {
-        return <p>{error.message}</p>
+      let errorElement;
+      if (error || error1) {
+           errorElement=  <p className="text-center text-warning">Error: {error?.message}{error1?.message}</p>
       }
     return (
         <div>
@@ -64,6 +65,7 @@ const Signup = () => {
                     Create Account
                 </Button>
               </Form>
+              {errorElement}
               <div className="social-login mx-auto">
                 <Button onClick={handleGoogleSignIn} className="d-block mx-auto" variant="primary" size="lg">
                 Sign In With Google

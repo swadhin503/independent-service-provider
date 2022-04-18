@@ -10,7 +10,7 @@ const Login = () => {
     const [email1, setEmail1] = useState('');
     const [password, setPassword] = useState('');
     const [
-        signInWithEmailAndPassword,user1
+        signInWithEmailAndPassword,user1,error1
       ] = useSignInWithEmailAndPassword(auth);
       const [signInWithGoogle, user, error] = useSignInWithGoogle(auth);
 
@@ -28,12 +28,15 @@ const Login = () => {
               <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
               <strong className="me-auto">Swadhin's Gym Center</strong>
             </Toast.Header>
-            <Toast.Body>Email Sent.</Toast.Body>
+            <Toast.Body>Email Sent...</Toast.Body>
           </Toast>)
       }
-      if(error) {
-        return <p>{error.message}</p>
-      }
+      let errorElement;
+      console.log(error);
+      if (error || error1) {
+        errorElement=  <p className="text-center text-warning">Error: {error?.message}{error1?.message}</p>
+   }
+
       if(user || user1){
           navigate(from,{replace:true});
       }
@@ -73,6 +76,7 @@ const Login = () => {
                  await sendPasswordResetEmail(email);}} variant="info" type="submit">
                     Reset Password
                 </Button>
+                {errorElement}
               </Form>
               <p className="signup-link">New to Swadhin's Gym Center? <Link to='/signup'>Create an account</Link></p>
               <div className="social-login mx-auto">

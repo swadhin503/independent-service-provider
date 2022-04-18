@@ -39,6 +39,9 @@ const Signup = () => {
       if(user || user1){
           navigate('/');
       }
+      if(error) {
+        return <p>{error.message}</p>
+      }
     return (
         <div>
             <Form className="text-center mt-5 login-border">

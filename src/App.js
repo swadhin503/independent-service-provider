@@ -34,7 +34,7 @@ function App() {
           </RequireAuth>
         }></Route>
       </Routes>
-
+      
       <Footer></Footer>
     </div>
   );

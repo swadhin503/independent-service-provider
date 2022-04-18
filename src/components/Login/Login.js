@@ -1,29 +1,45 @@
 import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Toast } from 'react-bootstrap';
 import auth from '../../firebase.init';
 import './Login.css';
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
-    const [email, setEmail] = useState('');
+    const [email1, setEmail1] = useState('');
     const [password, setPassword] = useState('');
     const [
         signInWithEmailAndPassword,user1
       ] = useSignInWithEmailAndPassword(auth);
-      const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+      const [signInWithGoogle, user, error] = useSignInWithGoogle(auth);
 
       const navigate = useNavigate();
       const location = useLocation();
       const from = location.state?.from?.pathname || '/';
-      
+      const [email, setEmail] = useState('');
+      const [sendPasswordResetEmail, sending] = useSendPasswordResetEmail(
+        auth
+      );
+
+      if(sending){
+          return (<Toast>
+             <Toast.Header>
+              <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
+              <strong className="me-auto">Swadhin's Gym Center</strong>
+            </Toast.Header>
+            <Toast.Body>Email Sent.</Toast.Body>
+          </Toast>)
+      }
+      if(error) {
+        return <p>{error.message}</p>
+      }
       if(user || user1){
           navigate(from,{replace:true});
       }
       
       const handleEmail = (event) => {
-          setEmail(event.target.value);
+          setEmail1(event.target.value);
       }
       const handlePassword = (event) => {
           setPassword(event.target.value);
@@ -32,7 +48,7 @@ const Login = () => {
           event.preventDefault();
           signInWithEmailAndPassword(email,password);
       }
-      const handleGoogleSignIn = (event) => {
+      const handleGoogleSignIn = () => {
 
           signInWithGoogle();
       }
@@ -50,8 +66,12 @@ const Login = () => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
                 </Form.Group>
-                <Button onClick={handleSignIn} variant="primary" type="submit">
+                <Button className="me-2" onClick={handleSignIn} variant="info" type="submit">
                     Login
+                </Button>
+                <Button onClick={async () => {
+                 await sendPasswordResetEmail(email);}} variant="info" type="submit">
+                    Reset Password
                 </Button>
               </Form>
               <p className="signup-link">New to Swadhin's Gym Center? <Link to='/signup'>Create an account</Link></p>
@@ -64,5 +84,6 @@ const Login = () => {
            
     );
 };
+
 
 export default Login;
